@@ -1,7 +1,6 @@
 "use client";
-
-import styles from "./page.module.css";
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/router';
+import {styles} from './page.module.css'
 
 export default function Home() {
   const router = useRouter();
