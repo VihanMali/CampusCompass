@@ -151,3 +151,24 @@
     top: 110%;
   }
 }
+
+
+.search {
+  padding: 1rem;
+  margin: 1rem;
+  border-radius: 0.25rem;
+  border: none;
+}
+
+.searchBtn {
+  padding: 1rem;
+  border-radius: 0.25rem;
+  border: none;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem;
+}
