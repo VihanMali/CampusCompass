@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 'use client';
 import { useEffect, useState } from 'react';
 import { XMLParser } from 'fast-xml-parser';
@@ -209,4 +208,3 @@ export default function CollegesPage() {
     </>
   );
 }
->>>>>>> expt
