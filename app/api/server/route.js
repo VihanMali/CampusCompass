@@ -1,11 +1,3 @@
-// Test...
-
-// export async function GET() {
-//     return Response.json({
-//         message: "Hello from backend!!"
-//     });
-// }
-
 
 import { NextResponse } from 'next/server';
 import fs from 'fs/promises';
@@ -13,7 +5,7 @@ import path from 'path';
 
 export async function GET() {
   try {
-    const filePath = path.join(process.cwd(), 'data', 'colleges.json');
+    const filePath = path.join(process.cwd(),'public', 'data', 'colleges.json');
     
     const fileContent = await fs.readFile(filePath, 'utf-8');
     
