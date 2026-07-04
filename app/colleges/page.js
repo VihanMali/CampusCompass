@@ -1,15 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
 import styles from "./colleges.module.css";
 import Link from "next/link";
-
-
-const DynamicMap = dynamic(() => import("./Map"), {
-  ssr: false,
-  loading: () => <p>Loading Map...</p>
-});
 
 export default function CollegesPage() {
   const [colleges, setColleges] = useState([]);

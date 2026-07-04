@@ -157,3 +157,12 @@
     grid-template-columns: 1fr;
   }
 }
+.mapContainer {
+  height: 450px;
+  width: 100%;
+}
+.card{
+  width: 100%;
+  justify-content: center;
+  /* margin-left: 150px; */
+}
