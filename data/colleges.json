@@ -1,0 +1,219 @@
+[
+  {
+    "id": "iit-delhi",
+    "name": "Indian Institute of Technology Delhi",
+    "shortName": "IIT Delhi",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "type": "Government",
+    "website": "https://home.iitd.ac.in",
+    "description": "One of India's premier IITs known for engineering, technology, research and innovation.",
+    "center": {
+      "lat": 28.545,
+      "lng": 77.1926
+    },
+    "courses": [
+      "B.Tech",
+      "M.Tech",
+      "M.Sc",
+      "MBA",
+      "PhD"
+    ]
+  },
+
+  {
+    "id": "iit-bombay",
+    "name": "Indian Institute of Technology Bombay",
+    "shortName": "IIT Bombay",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "type": "Government",
+    "website": "https://www.iitb.ac.in",
+    "description": "Premier IIT located in Powai, Mumbai, renowned for engineering and research.",
+    "center": {
+      "lat": 19.1334,
+      "lng": 72.9133
+    },
+    "courses": [
+      "B.Tech",
+      "M.Tech",
+      "M.Sc",
+      "MBA",
+      "PhD"
+    ]
+  },
+
+  {
+    "id": "iit-madras",
+    "name": "Indian Institute of Technology Madras",
+    "shortName": "IIT Madras",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "type": "Government",
+    "website": "https://www.iitm.ac.in",
+    "description": "Consistently ranked among India's best engineering institutes.",
+    "center": {
+      "lat": 12.9916,
+      "lng": 80.2336
+    },
+    "courses": [
+      "B.Tech",
+      "M.Tech",
+      "M.Sc",
+      "MBA",
+      "PhD"
+    ]
+  },
+
+  {
+    "id": "iit-kanpur",
+    "name": "Indian Institute of Technology Kanpur",
+    "shortName": "IIT Kanpur",
+    "city": "Kanpur",
+    "state": "Uttar Pradesh",
+    "type": "Government",
+    "website": "https://www.iitk.ac.in",
+    "description": "Leading IIT with strong research, innovation and entrepreneurship.",
+    "center": {
+      "lat": 26.5123,
+      "lng": 80.2329
+    },
+    "courses": [
+      "B.Tech",
+      "M.Tech",
+      "M.Sc",
+      "MBA",
+      "PhD"
+    ]
+  },
+
+  {
+    "id": "iit-kharagpur",
+    "name": "Indian Institute of Technology Kharagpur",
+    "shortName": "IIT Kharagpur",
+    "city": "Kharagpur",
+    "state": "West Bengal",
+    "type": "Government",
+    "website": "https://www.iitkgp.ac.in",
+    "description": "The first IIT established in India with one of the country's largest campuses.",
+    "center": {
+      "lat": 22.3149,
+      "lng": 87.3105
+    },
+    "courses": [
+      "B.Tech",
+      "M.Tech",
+      "M.Sc",
+      "MBA",
+      "PhD"
+    ]
+  },
+
+  {
+    "id": "nit-trichy",
+    "name": "National Institute of Technology Tiruchirappalli",
+    "shortName": "NIT Trichy",
+    "city": "Tiruchirappalli",
+    "state": "Tamil Nadu",
+    "type": "Government",
+    "website": "https://www.nitt.edu",
+    "description": "Top-ranked NIT offering engineering, architecture and management programs.",
+    "center": {
+      "lat": 10.7595,
+      "lng": 78.8132
+    },
+    "courses": [
+      "B.Tech",
+      "M.Tech",
+      "MBA",
+      "MCA",
+      "PhD"
+    ]
+  },
+
+  {
+    "id": "iiit-hyderabad",
+    "name": "International Institute of Information Technology Hyderabad",
+    "shortName": "IIIT Hyderabad",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "type": "Deemed University",
+    "website": "https://www.iiit.ac.in",
+    "description": "Leading institute specializing in computer science, AI and electronics.",
+    "center": {
+      "lat": 17.4456,
+      "lng": 78.3497
+    },
+    "courses": [
+      "B.Tech",
+      "MS",
+      "M.Tech",
+      "PhD"
+    ]
+  },
+
+  {
+    "id": "bits-pilani",
+    "name": "Birla Institute of Technology and Science Pilani",
+    "shortName": "BITS Pilani",
+    "city": "Pilani",
+    "state": "Rajasthan",
+    "type": "Private Deemed University",
+    "website": "https://www.bits-pilani.ac.in",
+    "description": "One of India's leading private engineering universities.",
+    "center": {
+      "lat": 28.3635,
+      "lng": 75.5873
+    },
+    "courses": [
+      "BE",
+      "M.E.",
+      "M.Sc",
+      "MBA",
+      "PhD"
+    ]
+  },
+
+  {
+    "id": "vit-vellore",
+    "name": "Vellore Institute of Technology",
+    "shortName": "VIT Vellore",
+    "city": "Vellore",
+    "state": "Tamil Nadu",
+    "type": "Private",
+    "website": "https://vit.ac.in",
+    "description": "Private university known for engineering, technology and international collaborations.",
+    "center": {
+      "lat": 12.9692,
+      "lng": 79.1559
+    },
+    "courses": [
+      "B.Tech",
+      "M.Tech",
+      "MBA",
+      "MCA",
+      "PhD"
+    ]
+  },
+
+  {
+    "id": "mit-manipal",
+    "name": "Manipal Institute of Technology",
+    "shortName": "MIT Manipal",
+    "city": "Manipal",
+    "state": "Karnataka",
+    "type": "Private",
+    "website": "https://www.manipal.edu/mit.html",
+    "description": "Flagship engineering institute of Manipal Academy of Higher Education.",
+    "center": {
+      "lat": 13.3525,
+      "lng": 74.7928
+    },
+    "courses": [
+      "B.Tech",
+      "M.Tech",
+      "MCA",
+      "PhD"
+    ]
+  }
+]
