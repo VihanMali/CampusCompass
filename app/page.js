@@ -29,9 +29,9 @@ export default function Home() {
       <div className={styles.contentWrapper}>
         <h2 className={styles.subTitle}>Welcome to</h2>
         <h1 className={styles.title}>CampusCompass</h1>
-        <button onClick={handleOpenFile} className={styles.getStartedBtn}>
+        <Button onClick={handleOpenFile} className={styles.getStartedBtn}>
           Get Started
-        </button>
+        </Button>
       </div>
     </>
   );
