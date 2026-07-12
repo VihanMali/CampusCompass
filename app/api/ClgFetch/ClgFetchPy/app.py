@@ -43,52 +43,52 @@ else:
     if db.execute("SELECT * FROM mapData Where clgName = ?", clgName):
         inserted = True
 
-#check whether the data returned has a way with geometry or a relation inside of which is a 
-# way that has a geometry (only these 2 contain the actual boundary of the coords of the college)
-elements = data["elements"]
+    #check whether the data returned has a way with geometry or a relation inside of which is a 
+    # way that has a geometry (only these 2 contain the actual boundary of the coords of the college)
+    elements = data["elements"]
 
-has_boundary = any(
-    (el["type"] == "way" and "geometry" in el) or
-    (el["type"] == "relation" and any(
-        m["type"] == "way" and "geometry" in m for m in el.get("members", [])
-    ))
-    for el in elements
-)
+    has_boundary = any(
+        (el["type"] == "way" and "geometry" in el) or
+        (el["type"] == "relation" and any(
+            m["type"] == "way" and "geometry" in m for m in el.get("members", [])
+        ))
+        for el in elements
+    )
 
-if not has_boundary:
-    print(f"No boundary data found for {clgName} — only point data (or nothing) is available in OSM.")
-else:
+    if not has_boundary:
+        print(f"No boundary data found for {clgName} — only point data (or nothing) is available in OSM.")
+    else:
 
-    #insert the college if not already in the database
+        #insert the college if not already in the database
 
-    if not inserted:
-        for element in data["elements"]:
-            if element["type"] == "node":
-                lat_lon = str(element["lat"]) + " " + str(element["lon"])
-                if inserted:
-                    db.execute("UPDATE mapData SET edgeCoords = edgeCoords || ? WHERE clgName = ?", ";" + lat_lon, clgName)
-                else:
-                    db.execute("INSERT INTO mapData (clgName, edgeCoords) VALUES (?, ?)", clgName, lat_lon)
-                    inserted = True
+        if not inserted:
+            for element in data["elements"]:
+                if element["type"] == "node":
+                    lat_lon = str(element["lat"]) + " " + str(element["lon"])
+                    if inserted:
+                        db.execute("UPDATE mapData SET edgeCoords = edgeCoords || ? WHERE clgName = ?", ";" + lat_lon, clgName)
+                    else:
+                        db.execute("INSERT INTO mapData (clgName, edgeCoords) VALUES (?, ?)", clgName, lat_lon)
+                        inserted = True
 
 
-                print(element["lat"], element["lon"])
-            elif element["type"] == "way":
-                if "geometry" in element:
-                    for point in element["geometry"]:
-                        lat_lon = str(point["lat"]) + " " + str(point["lon"])
-                        if inserted:
-                            db.execute("UPDATE mapData SET edgeCoords = edgeCoords || ? WHERE clgName = ?", ";" + lat_lon, clgName)
-                        else:
-                            db.execute("INSERT INTO mapData (clgName, edgeCoords) VALUES (?, ?)", clgName, lat_lon)
-                            inserted = True
-            elif element["type"] == "relation":
-                for member in element.get("members", []):
-                    if member["type"] == "way" and "geometry" in member:
-                        for point in member["geometry"]:
+                    print(element["lat"], element["lon"])
+                elif element["type"] == "way":
+                    if "geometry" in element:
+                        for point in element["geometry"]:
                             lat_lon = str(point["lat"]) + " " + str(point["lon"])
                             if inserted:
                                 db.execute("UPDATE mapData SET edgeCoords = edgeCoords || ? WHERE clgName = ?", ";" + lat_lon, clgName)
                             else:
                                 db.execute("INSERT INTO mapData (clgName, edgeCoords) VALUES (?, ?)", clgName, lat_lon)
                                 inserted = True
+                elif element["type"] == "relation":
+                    for member in element.get("members", []):
+                        if member["type"] == "way" and "geometry" in member:
+                            for point in member["geometry"]:
+                                lat_lon = str(point["lat"]) + " " + str(point["lon"])
+                                if inserted:
+                                    db.execute("UPDATE mapData SET edgeCoords = edgeCoords || ? WHERE clgName = ?", ";" + lat_lon, clgName)
+                                else:
+                                    db.execute("INSERT INTO mapData (clgName, edgeCoords) VALUES (?, ?)", clgName, lat_lon)
+                                    inserted = True
