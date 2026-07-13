@@ -5,11 +5,12 @@ import "leaflet/dist/leaflet.css";
 import { MapContainer, Marker, Polygon, Popup, TileLayer, useMap } from "react-leaflet";
 import L from "leaflet";
 
+// Resolve default marker asset missing issues inside Next.js framework distributions
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: "https://unpkg.com",
-  iconUrl: "https://unpkg.com",
-  shadowUrl: "https://unpkg.com",
+  iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
 const EXACT_CAMPUS_POLYGONS = {
@@ -58,14 +59,11 @@ function MapViewportController({ center, boundary }) {
   return null;
 }
 
-export default function Map({ center, zoom, name }) {
-  const [currentCenter, setCurrentCenter] = useState([19.1334, 72.9133]);
-  const [currentName, setCurrentName] = useState(name || "College");
-  const [activeId, setActiveId] = useState("iit-bombay");
+export default function Map({ id, center, zoom, name }) {
   const [actualBoundary, setActualBoundary] = useState([]);
-  const [extendedBoundary, setExtendedBoundary] = useState([]);
   const [worldMask, setWorldMask] = useState([]);
 
+  // Precise vector projection method to expand irregular polygons outward by exactly 50 meters
   const computeExtendedBoundary = (coords, distanceMeters) => {
     if (!coords || coords.length === 0) return [];
 
@@ -95,12 +93,11 @@ export default function Map({ center, zoom, name }) {
     setWorldMask([worldOuterRing, polygonCoords]);
   };
 
-  const syncCampusGeometry = (id, fallbackLat, fallbackLng) => {
-    const truePolygon = EXACT_CAMPUS_POLYGONS[id];
+  const syncCampusGeometry = (campusId, fallbackLat, fallbackLng) => {
+    const truePolygon = EXACT_CAMPUS_POLYGONS[campusId];
 
     if (truePolygon) {
       setActualBoundary(truePolygon);
-      setExtendedBoundary(computeExtendedBoundary(truePolygon, 50));
       constructSpatialMask(truePolygon);
     } else {
       const lat = fallbackLat;
@@ -113,11 +110,11 @@ export default function Map({ center, zoom, name }) {
         [lat - dLat * 0.9, lng + dLng * 1.3], [lat - dLat, lng - dLng]
       ];
       setActualBoundary(computedBase);
-      setExtendedBoundary(computeExtendedBoundary(computedBase, 50));
       constructSpatialMask(computedBase);
     }
   };
 
+  // Route hooks for standard incoming parent page layout arguments
   useEffect(() => {
     if (Array.isArray(center)) {
       setCurrentCenter(center);
@@ -132,6 +129,7 @@ export default function Map({ center, zoom, name }) {
     }
   }, [center]);
 
+  // Intercepting parent rendering context to trace paths and match active college profiles
   useEffect(() => {
     if (typeof window !== "undefined") {
       const pathSegments = window.location.pathname.split("/");
@@ -156,8 +154,8 @@ export default function Map({ center, zoom, name }) {
 
   return (
     <MapContainer
-      center={currentCenter}
-      zoom={15}
+      center={center}
+      zoom={zoom}
       style={{ height: "600px", width: "100%", backgroundColor: "#f5f5f5" }}
     >
       <TileLayer
@@ -179,6 +177,7 @@ export default function Map({ center, zoom, name }) {
         />
       )}
 
+      {/* 50m Extended Outer Boundary Perimeter: Sharp Dashed Dark Crimson Line */}
       {extendedBoundary.length > 0 && (
         <Polygon
           positions={extendedBoundary}
@@ -186,10 +185,12 @@ export default function Map({ center, zoom, name }) {
         />
       )}
 
+      {/* Primary Pinpointer Marker */}
       <Marker position={currentCenter}>
         <Popup>{currentName}</Popup>
       </Marker>
 
+      {/* Inner Campus Place Names: Only renders if coordinates fall within the container map array */}
       {INNER_ESTABLISHMENTS[activeId]?.map((place, idx) => (
         <Marker key={idx} position={place.coords} icon={new L.DivIcon({
           className: 'custom-poi-label',
@@ -199,7 +200,7 @@ export default function Map({ center, zoom, name }) {
         })} />
       ))}
 
-      <MapViewportController center={currentCenter} boundary={actualBoundary} />
+      <MapViewportController center={center} boundary={actualBoundary} />
     </MapContainer>
   );
 }
