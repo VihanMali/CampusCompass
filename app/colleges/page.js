@@ -8,7 +8,7 @@ export default function CollegesPage() {
   const [colleges, setColleges] = useState([]);
 
   async function getData() {
-    const res = await fetch('api/server/');
+    const res = await fetch('api/colleges/');
     const data = await res.json();
     setColleges(data);
   }
@@ -23,7 +23,7 @@ export default function CollegesPage() {
         {colleges.map(college => (
           <Link href={`/colleges/${college.id}`}
           className={styles.card} key={college.id}>
-          <h2>🎓{college.shortName}</h2>
+          <h2>🎓{college.short_name}</h2>
           <h3 style={{color:'#7e7e7e'}}>{college.name}</h3> 
           </Link>
         ))}
