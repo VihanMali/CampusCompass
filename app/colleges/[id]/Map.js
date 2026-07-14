@@ -5,7 +5,7 @@ import "leaflet/dist/leaflet.css";
 import { MapContainer, Marker, Polygon, Popup, TileLayer, useMap } from "react-leaflet";
 import L from "leaflet";
 
-// Resolve default marker asset missing issues inside Next.js framework distributions
+// Fix default marker asset missing issues in Next.js SSR/Builds
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
@@ -13,6 +13,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
+// High-fidelity Survey Coordinates mapped for the specific IDs in your dataset
 const EXACT_CAMPUS_POLYGONS = {
   "iit-delhi": [
     [28.5485, 77.1842], [28.5512, 77.1915], [28.5471, 77.1995],
@@ -32,6 +33,7 @@ const EXACT_CAMPUS_POLYGONS = {
   ]
 };
 
+// Internal place markers nested within boundaries to display selectively
 const INNER_ESTABLISHMENTS = {
   "iit-delhi": [
     { name: "Dogra Hall Auditorium", coords: [28.5458, 77.1918] },
@@ -49,6 +51,7 @@ const INNER_ESTABLISHMENTS = {
   ]
 };
 
+// Viewport controller to dynamically adjust center and map visibility properties
 function MapViewportController({ center, boundary }) {
   const map = useMap();
   useEffect(() => {
@@ -63,29 +66,7 @@ export default function Map({ id, center, zoom, name }) {
   const [actualBoundary, setActualBoundary] = useState([]);
   const [worldMask, setWorldMask] = useState([]);
 
-  // Precise vector projection method to expand irregular polygons outward by exactly 50 meters
-  const computeExtendedBoundary = (coords, distanceMeters) => {
-    if (!coords || coords.length === 0) return [];
-
-    let latSum = 0, lngSum = 0;
-    coords.forEach(([lat, lng]) => { latSum += lat; lngSum += lng; });
-    const cLat = latSum / coords.length;
-    const cLng = lngSum / coords.length;
-
-    const latScalar = 111320;
-    const lngScalar = 40075000 * Math.cos((cLat * Math.PI) / 180) / 360;
-
-    return coords.map(([lat, lng]) => {
-      const vLat = lat - cLat;
-      const vLng = lng - cLng;
-      const mag = Math.sqrt(vLat * vLat + vLng * vLng) || 1;
-
-      const offsetLat = (vLat / mag) * (distanceMeters / latScalar);
-      const offsetLng = (vLng / mag) * (distanceMeters / lngScalar);
-      return [lat + offsetLat, lng + offsetLng];
-    });
-  };
-
+  // Generate an inverted background shield that whites out everything outside the target boundary
   const constructSpatialMask = (polygonCoords) => {
     const worldOuterRing = [
       [90, -180], [90, 180], [-90, 180], [-90, -180], [90, -180]
@@ -100,6 +81,7 @@ export default function Map({ id, center, zoom, name }) {
       setActualBoundary(truePolygon);
       constructSpatialMask(truePolygon);
     } else {
+      // Dynamic baseline polygon generator if specific ID arrays are unmapped
       const lat = fallbackLat;
       const lng = fallbackLng;
       const dLat = 450 / 111320;
@@ -114,43 +96,13 @@ export default function Map({ id, center, zoom, name }) {
     }
   };
 
-  // Route hooks for standard incoming parent page layout arguments
+  // updates the map geometry whenever props change
   useEffect(() => {
-    if (Array.isArray(center)) {
-      setCurrentCenter(center);
-    } else if (center && typeof center === "object") {
-      const lat = center.lat || center.latitude;
-      const lng = center.lng || center.lon || center.longitude;
-      if (lat && lng) {
-        const pLat = parseFloat(lat);
-        const pLng = parseFloat(lng);
-        setCurrentCenter([pLat, pLng]);
-      }
+    if (id && center) {
+      syncCampusGeometry(id, center[0], center[1]);
     }
-  }, [center]);
+  }, [id, center]);
 
-  // Intercepting parent rendering context to trace paths and match active college profiles
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const pathSegments = window.location.pathname.split("/");
-      const currentId = pathSegments[pathSegments.length - 1];
-      setActiveId(currentId);
-
-      fetch("/data/colleges.json")
-        .then((res) => res.json())
-        .then((data) => {
-          const match = data.find((item) => item.id === currentId);
-          if (match && match.center) {
-            const mLat = parseFloat(match.center.lat);
-            const mLng = parseFloat(match.center.lng);
-            setCurrentCenter([mLat, mLng]);
-            setCurrentName(match.name);
-            syncCampusGeometry(currentId, mLat, mLng);
-          }
-        })
-        .catch((err) => console.error("Synchronization loop tracking exception:", err));
-    }
-  }, [name]);
 
   return (
     <MapContainer
@@ -163,6 +115,7 @@ export default function Map({ id, center, zoom, name }) {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
+      {/* Spatial Cutout Shield: Obscures everything outside the accurate polygon */}
       {worldMask.length > 0 && (
         <Polygon
           positions={worldMask}
@@ -170,6 +123,7 @@ export default function Map({ id, center, zoom, name }) {
         />
       )}
 
+      {/* Actual Campus Boundary Poly: Highly customized per university */}
       {actualBoundary.length > 0 && (
         <Polygon
           positions={actualBoundary}
@@ -177,21 +131,13 @@ export default function Map({ id, center, zoom, name }) {
         />
       )}
 
-      {/* 50m Extended Outer Boundary Perimeter: Sharp Dashed Dark Crimson Line */}
-      {extendedBoundary.length > 0 && (
-        <Polygon
-          positions={extendedBoundary}
-          pathOptions={{ color: "#b71c1c", weight: 2, dashArray: "4, 10", fillColor: "transparent" }}
-        />
-      )}
-
       {/* Primary Pinpointer Marker */}
-      <Marker position={currentCenter}>
-        <Popup>{currentName}</Popup>
+      <Marker position={center}>
+        <Popup>{name || "College"}</Popup>
       </Marker>
 
       {/* Inner Campus Place Names: Only renders if coordinates fall within the container map array */}
-      {INNER_ESTABLISHMENTS[activeId]?.map((place, idx) => (
+      {INNER_ESTABLISHMENTS[id]?.map((place, idx) => (
         <Marker key={idx} position={place.coords} icon={new L.DivIcon({
           className: 'custom-poi-label',
           html: `<div style="background: rgba(255,255,255,0.9); padding: 4px 8px; border: 1px solid #003b87; border-radius: 4px; font-weight: bold; font-size: 11px; white-space: nowrap; color: #003b87; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">${place.name}</div>`,
