@@ -29,6 +29,24 @@ const insertCourse = db.prepare(`
   VALUES(?, ?)
 `);
 
+const insertCollegeBoundary = db.prepare(`
+  INSERT INTO campus_boundary (
+    college_id,
+    boundary
+  )
+  VALUES(?, ?)
+`);
+
+const insertCampusPlaces = db.prepare(`
+  INSERT INTO campus_places (
+    college_id,
+    name,
+    latitude,
+    longitude
+  )
+  VALUES(?, ?, ?, ?)
+`);
+
 const importdata = db.transaction(() => {
   for (const college of colleges) {
     insertCollege.run(
@@ -49,6 +67,24 @@ const importdata = db.transaction(() => {
         college.id,
         course
       );
+    }
+
+    if (college.boundary) {
+      insertCollegeBoundary.run(
+        college.id,
+        JSON.stringify(college.boundary)
+      );
+    }
+
+    if (college.locations) {
+      for (const location of college.locations) {
+        insertCampusPlaces.run(
+          college.id,
+          location.name,
+          location.coords[0],
+          location.coords[1],
+        );
+      }
     }
   }
 });

@@ -32,8 +32,29 @@ export function getCollege(id) {
   return college;
 }
 
+export function getCollegeMapData(id) {
+  const boundary = db.prepare(`
+    SELECT boundary
+    FROM campus_boundary
+    WHERE college_id = ? 
+  `).get(id);
+
+  if (!boundary) return null;
+
+  const campusPlaces = db.prepare(`
+    SELECT id, name, latitude, longitude
+    FROM campus_places
+    WHERE college_id = ?
+  `).all(id);
+
+  return {
+    boundary: JSON.parse(boundary.boundary),
+    campusPlaces
+  }
+}
+
+
 // insertCollege(college)
 
-// getBoundary(id)
 
 // insertBoundary(id, boundary)
