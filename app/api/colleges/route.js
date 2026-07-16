@@ -1,7 +1,7 @@
 import { getColleges } from '@/db/college.js';
 
 export async function GET() {
-    const res = getColleges();
-    return Response.json(res);
+  const colleges = getColleges();
+  return Response.json(colleges);
 }
 

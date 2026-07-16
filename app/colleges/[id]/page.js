@@ -22,10 +22,14 @@ export default function CollegesPage({ params }) {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('/data/colleges.json');
+        const response = await fetch(`/api/colleges/${collegeId}`);
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch college");
+        }
+
         const data = await response.json();
-        const match = data.find(item => item.id === collegeId);
-        setCollege(match);
+        setCollege(data);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -47,13 +51,20 @@ export default function CollegesPage({ params }) {
     );
   }
 
-  const mapCenter = college.center
-    ? [parseFloat(college.center.lat), parseFloat(college.center.lng)] 
+  const mapCenter = (college.center_lat && college.center_lng)
+    ? [college.center_lat, college.center_lng] 
     : null;
 
   return (
     <>
-      <a href="/colleges" style={{ border: 'none', margin: '10px', backgroundColor: '#003b87' }} className={styles.collegeBtn}>See all Colleges</a>
+      <a 
+        href="/colleges" 
+        style={{ border: 'none', margin: '10px', backgroundColor: '#003b87' }} 
+        className={styles.collegeBtn}
+      >
+        See all Colleges
+      </a>
+
       <main className={styles.collegeContainer}>
         <header className={styles.collegeHeader}>
           <h1 className={styles.collegeTitle}>{college.name}</h1>
@@ -64,7 +75,7 @@ export default function CollegesPage({ params }) {
         <div className={styles.collegeGrid}>
           <div className={styles.metaCard}>
             <span>Institution Type</span>
-            <strong>{college.type} ({college.shortName})</strong>
+            <strong>{college.type} ({college.short_name})</strong>
           </div>
           <div className={styles.metaCard}>
             <span>State</span>
@@ -79,8 +90,8 @@ export default function CollegesPage({ params }) {
         <section className={styles.coursesSection}>
           <h2 className={styles.coursesTitle}>Academic Offerings</h2>
           <ul className={styles.coursesList}>
-            {college.courses?.map((course, index) => (
-              <li key={index} className={styles.courseItem}>{course}</li>
+            {college.courses?.map((course) => (
+              <li key={course.id} className={styles.courseItem}>{course.course_name}</li>
             ))}
           </ul>
         </section>
@@ -96,7 +107,7 @@ export default function CollegesPage({ params }) {
 
       </main>
 
-      {college?.center && (
+      {mapCenter && (
         <div className={styles.mapCard}>
           <DynamicMap id={collegeId} center={mapCenter} zoom={17} name={college.name} />
         </div>

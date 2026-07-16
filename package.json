@@ -2,11 +2,15 @@
   "name": "campus-compass",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:init": "node db/init.js",
+    "db:seed": "node scripts/importColleges.js",
+    "db:setup": "npm run db:init && npm run db:seed"
   },
   "dependencies": {
     "better-sqlite3": "^12.11.1",
