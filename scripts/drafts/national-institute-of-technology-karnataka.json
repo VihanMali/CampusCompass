@@ -1,0 +1,16 @@
+{
+    "id": null,
+    "name": "National Institute of Technology, Karnataka",
+    "shortName": null,
+    "state": "Karnataka",
+    "type": null,
+    "website": null,
+    "description": "The National Institute of Technology Karnataka (NITK), also known as NITK Surathkal and formerly known as Karnataka Regional Engineering College (KREC), is a public technical university located in Surathkal, Mangaluru. Established in 1960 as KREC, it has since evolved into one of the 31 National Institutes of Technology in India. It is recognized as an Institute of National Importance by the Government of India. The institute features a suburban campus situated in close proximity to the Arabian Sea, with National Highway 66 running through the campus and serving as a major access route. NITK Surathkal is ranked as one of the prestigious engineering institutions in India.",
+    "center": {
+        "lat": 13.011191,
+        "lng": 74.7960578
+    },
+    "courses": [],
+    "boundary": [],
+    "locations": []
+}

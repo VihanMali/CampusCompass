@@ -8,9 +8,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+
     "db:init": "node db/init.js",
     "db:seed": "node scripts/importColleges.js",
-    "db:setup": "npm run db:init && npm run db:seed"
+    "db:setup": "npm run db:init && npm run db:seed",
+
+    "college:add": "node scripts/addCollege.js"
   },
   "dependencies": {
     "better-sqlite3": "^12.11.1",
